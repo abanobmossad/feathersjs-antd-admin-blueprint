@@ -1,0 +1,11 @@
+.layout__sider{
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+}
+.layout__link{
+  font-weight: 100;
+  font-size: 1.5rem;
+  color: #fff;
+}

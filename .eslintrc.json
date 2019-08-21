@@ -1,0 +1,60 @@
+{
+  "extends": [
+    "airbnb"
+  ],
+  "env": {
+    "node": true,
+    "browser": true,
+    "meteor": true,
+    "mocha": true
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "linebreak-style": ["off"],
+    "max-len": [
+      "warn"
+    ],
+    "no-param-reassign": [
+      "warn"
+    ],
+    "no-underscore-dangle": ["warn",
+      {"allow": ["_id"]}
+    ],
+    "no-unused-vars": [
+      "warn",
+      {
+        "args": "none"
+      }
+    ],
+    "react/jsx-props-no-spreading":"off",
+    "camelcase": "warn",
+    "react/no-unused-state":"warn",
+    "react/jsx-filename-extension": ["off"],
+    "react/forbid-prop-types": ["off"],
+    "jsx-a11y/anchor-is-valid": [ "error",
+      {
+        "components": [ "Link" ],
+        "specialLink": [ "to" ]
+      }
+    ],
+    "react/prop-types": [
+      "warn"
+    ],
+    "jsx-a11y/click-events-have-key-events": [
+      "warn"
+    ],
+    "jsx-a11y/no-noninteractive-element-interactions": [
+      "warn"
+    ],
+    "import/no-unresolved": [
+      "error",
+      {
+        "ignore": ["^meteor*"]
+      }
+    ],
+    "import/prefer-default-export": "off",
+    "import/no-extraneous-dependencies": [
+      "off"
+    ]
+  }
+}

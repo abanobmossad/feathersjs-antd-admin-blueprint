@@ -1,0 +1,30 @@
+.layout__header {
+	position: fixed;
+	z-index: 100;
+	width: 100%;
+}
+.layout__header__item {
+	float: right;
+}
+.layout__logo {
+	margin: 0 -38px;
+	float: left;
+}
+.layout__logo img {
+	border-radius: 50%;
+	margin: 0 0.5rem;
+	width: 52;
+	height: 52;
+}
+
+.layout__logo a {
+	color: #1dd1a1;
+	font-size: 2rem;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.layout__header__profile-menu {
+	line-height: 64px;
+	height: 1px;
+}
