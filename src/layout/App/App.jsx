@@ -12,7 +12,7 @@ import moment from 'moment';
 import MainLayout from '../MainLayout';
 import AuthRoute from '../AuthRoute';
 import Error500 from '../../pages/Error500';
-import TableEx from '../../examples/TableEx';
+import TestCom from '../../examples/ListViewEx';
 // import for all routing components
 
 // change app language
@@ -37,7 +37,7 @@ const App = () => (
           {/* Routes for the main layout (with navbar and footer) */}
           <MainLayout>
             <Switch>
-              <Route exact path="/test" component={TableEx} />
+              <Route exact path="/test" component={TestCom} />
 
               {/* Error pages */}
               <Route exact path="/500" component={Error500} />

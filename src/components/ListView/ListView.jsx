@@ -3,65 +3,21 @@ import { withRouter } from 'react-router-dom';
 import propTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
-  Table, Divider, Popconfirm,
-  message, Button, Icon,
+  message, Button, Icon, List, Popconfirm,
 } from 'antd';
+import isBoolean from 'lodash/isBoolean';
 import server from '../../feathers';
 
-// rowSelection object indicates the need for row selection
-const rowSelectionAction = (action) => {
-  if (!action.onChange) throw new Error('rowSelection must have onChange function');
-  return {
-    onChange: action.onChange,
-    getCheckboxProps: action.getCheckboxProps && action.getCheckboxProps,
-  };
-};
-
-class DataTable extends React.Component {
+class ListView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
-      totalData: 0,
       loading: true,
+      totalData: 0,
     };
     // browser history for redirect;
     this.history = props.history;
-    const { actions } = props;
-    props.columns.push({
-      title: <FormattedMessage id="cards.table.control" defaultMessage="Control" />,
-      key: 'control',
-      fixed: 'right',
-      render: (record) => (
-        <span>
-          {this.renderEditButton(record._id)}
-          {actions.remove && (
-          <>
-            {' '}
-            <Divider type="vertical" />
-            <Popconfirm
-              icon={<Icon type="delete" />}
-              title={(
-                <FormattedMessage
-                  id="DataTable.pop.delete"
-                  defaultMessage={`Sure to delete this ${props.entityName} ?`}
-                  values={{ entityName: props.entityName }}
-                />
-              )}
-              onConfirm={() => this.handleDelete(record._id)}
-            >
-              <Button
-                type="link"
-                shape="circle-outline"
-                icon="delete"
-                title={`Remove ${props.entityName}`}
-              />
-            </Popconfirm>
-          </>
-          )}
-        </span>
-      ),
-    });
   }
 
   componentDidMount() {
@@ -77,6 +33,7 @@ class DataTable extends React.Component {
             type="link"
             shape="circle-outline"
             icon="edit"
+            style={{ border: 'none' }}
             title={`Edit ${entityName}`}
             onClick={() => this.history.push(actions.edit.redirectUrl(id))}
           />
@@ -112,6 +69,17 @@ class DataTable extends React.Component {
       });
   }
 
+  loadAsGrid = (grid) => {
+    if (isBoolean(grid)) {
+      if (grid === true) {
+        return { gutter: 16, column: 3 };
+      }
+      return undefined;
+    }
+    return grid;
+  }
+
+
   fetchData(page) {
     const { fetchData, pagination: { pageSize } } = this.props;
     server.service(fetchData.path).find({
@@ -123,8 +91,8 @@ class DataTable extends React.Component {
     }).then((fetchedData) => {
       this.setState({
         data: fetchedData.data,
-        loading: false,
         totalData: fetchedData.total,
+        loading: false,
         currentPage: page || 1,
       });
     }).catch((err) => {
@@ -136,31 +104,23 @@ class DataTable extends React.Component {
     });
   }
 
+
   render() {
     const {
-      data, totalData, loading, currentPage,
+      data, loading, totalData, currentPage,
     } = this.state;
     const {
-      pagination, rowSelection, columns, size,
+      size, listMeta, listContent, extra, grid,
+      actions, entityName, itemLayout, pagination,
     } = this.props;
-
-    const rowSlc = rowSelection ? {
-      rowSelection: rowSelectionAction(rowSelectionAction),
-    } : {};
-
     return (
-      <Table
-        dataSource={data}
-        columns={columns}
+      <List
         loading={loading}
-        scroll={{ x: 900 }}
-        rowKey={(record) => record._id}
+        // itemLayout="vertical"
+        dataSource={data}
+        itemLayout={itemLayout}
         size={size}
-        {...rowSlc}
-        rowClassName="table__row"
-        // onRow={(record, rowIndex) => ({
-        //   onDoubleClick: (event) => this.history.push(`/cards/${record.id}`),
-        // })}
+        grid={this.loadAsGrid(grid)}
         pagination={{
           hideOnSinglePage: true,
           current: currentPage,
@@ -173,22 +133,54 @@ class DataTable extends React.Component {
             this.fetchData(page);
           },
         }}
+        renderItem={(item) => (
+          <List.Item
+            key={item.title}
+            actions={[
+              this.renderEditButton(item._id),
+              actions.remove && (
+              <Popconfirm
+                icon={<Icon type="delete" />}
+                title={(
+                  <FormattedMessage
+                    id="listView.pop.delete"
+                    defaultMessage={`Sure to delete this ${entityName} ?`}
+                    values={{ entityName }}
+                  />
+                    )}
+                onConfirm={() => this.handleDelete(item._id)}
+              >
+                <Button
+                  type="link"
+                  shape="circle-outline"
+                  icon="delete"
+                  title={`Remove ${entityName}`}
+                />
+              </Popconfirm>
+              ),
+            ]}
+            extra={extra}
+          >
+            <List.Item.Meta
+              {...listMeta(item)}
+            />
+            {listContent && listContent(item)}
+          </List.Item>
+        )}
       />
     );
   }
 }
 
-DataTable.defaultProps = {
+ListView.defaultProps = {
+  fetchData: {
+    query: {},
+  },
   pagination: {
     pageSize: 10,
     position: 'bottom',
   },
-  fetchData: {
-    query: {},
-  },
-  tableName: 'Table',
   entityName: 'Row',
-  rowSelection: false,
   size: 'default',
   actions: {
     edit: {
@@ -196,10 +188,14 @@ DataTable.defaultProps = {
     },
     remove: true,
   },
+  listContent: undefined,
+  extra: undefined,
+  itemLayout: 'vertical',
+  grid: false,
 };
-DataTable.propTypes = {
+ListView.propTypes = {
   history: propTypes.instanceOf(Object).isRequired,
-  columns: propTypes.instanceOf(Object).isRequired,
+  listMeta: propTypes.func.isRequired,
   fetchData: propTypes.shape({
     path: propTypes.string.isRequired,
     query: propTypes.instanceOf(Object),
@@ -212,14 +208,16 @@ DataTable.propTypes = {
       element: propTypes.func,
     }),
   }),
-  entityName: propTypes.string,
-  tableName: propTypes.string,
   pagination: propTypes.shape({
     pageSize: propTypes.number,
     position: propTypes.string,
   }),
-  rowSelection: propTypes.oneOfType([propTypes.func, propTypes.bool]),
-  size: propTypes.oneOf(['default', 'small', 'middle']),
+  entityName: propTypes.string,
+  size: propTypes.oneOf(['default', 'small', 'large']),
+  itemLayout: propTypes.oneOf(['vertical', 'horizontal']),
+  listContent: propTypes.func,
+  extra: propTypes.element,
+  grid: propTypes.oneOfType([propTypes.instanceOf(Object), propTypes.bool]),
 };
 
-export default withRouter(DataTable);
+export default withRouter(ListView);
