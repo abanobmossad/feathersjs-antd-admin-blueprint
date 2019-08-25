@@ -4,7 +4,7 @@ import DrawerButton from '../../components/DrawerButton';
 import View from '../../components/View';
 
 const schema = {
-  title: 'Orders Info',
+  title: 'Order info' /*  (item) => item._id */,
   data: [
     { label: 'Amount', dataIndex: 'amount' },
     { label: 'Status', dataIndex: 'status', render: (status) => <Tag>{status}</Tag> },

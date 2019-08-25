@@ -1,38 +1,37 @@
 * {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	font-family: Arial, sans-serif;
 }
 
 html {
-  font-size: 63.5%;
+	font-size: 63.5%;
 }
 
-
 .container {
-  width: 100%;
-  margin: 3rem auto
+	width: 100%;
+	margin: 3rem auto;
 }
 
 .flex {
-  display: flex;
+	display: flex;
 }
 
 .column {
-  flex-direction: column;
+	flex-direction: column;
 }
 
 .row {
-  flex-direction: row;
+	flex-direction: row;
 }
 
 .fill {
-  width: 100%;
+	width: 100%;
 }
 
 .form-group {
-  margin: 1rem .4rem;
+	margin: 1rem 0.4rem;
 }
-.view__actions button{
-  margin-right: 1rem
+.view__actions button {
+	margin-right: 1rem;
 }

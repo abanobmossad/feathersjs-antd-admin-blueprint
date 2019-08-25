@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Descriptions, message, Spin } from 'antd';
 import propTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import isFunction from 'lodash/isFunction';
 import server from '../../feathers';
 
 class View extends Component {
@@ -36,7 +37,7 @@ class View extends Component {
     const { data } = this.state;
     const { schema } = this.props;
     return (
-      <Descriptions title={schema.title}>
+      <Descriptions title={isFunction(schema.title) ? schema.title(data) : schema.title}>
         {schema.data.map((v) => (
           <Descriptions.Item
             key={v.dataIndex}
@@ -51,7 +52,7 @@ class View extends Component {
 
   render() {
     const { loading } = this.state;
-    if (loading) return <Spin />;
+    if (loading) return <Spin size="large" style={{ margin: '38% 50%' }} />;
     return this.renderSchema();
   }
 }
