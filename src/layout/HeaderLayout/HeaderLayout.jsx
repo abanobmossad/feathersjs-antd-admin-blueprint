@@ -31,7 +31,7 @@ const HeaderLayout = () => (
     <Menu
       className="layout__header__profile-menu"
       mode="horizontal"
-      style={{ lineHeight: '64px' }}
+      style={{ lineHeight: '64px', borderBottomColor: colors['header-background'] }}
     >
       {/* profile */}
       <Menu.SubMenu

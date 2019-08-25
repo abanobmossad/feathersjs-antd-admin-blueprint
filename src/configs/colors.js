@@ -3,8 +3,8 @@
 module.exports = {
   'header-background': '#fff',
   'sider-background': '#fff',
-  'footer-version': '#1dd1a1',
-  '@primary-color': '#1dd1a1', // primary color for all components
+  'footer-version': '#0984e3',
+  '@primary-color': '#0984e3', // primary color for all components
   '@link-color': ' #1890ff', // link color
   '@success-color': ' #52c41a', // success state color
   '@warning-color': ' #faad14', // warning state color

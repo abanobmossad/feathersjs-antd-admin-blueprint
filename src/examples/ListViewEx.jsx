@@ -14,7 +14,8 @@ const ListViewEx = () => (
     })}
     listContent={(item) => (
       <p>
-        {item.title}
+        <b>{item.title}</b>
+        <hr />
         Lorem ipsum dolor sit amet consectetur
         adipisicing elit. Maxime neque ducimus adipisci
         dignissimos dolor excepturi, sint earum eius

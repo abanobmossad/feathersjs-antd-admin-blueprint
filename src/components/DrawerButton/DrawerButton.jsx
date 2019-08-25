@@ -41,7 +41,7 @@ class DrawerButton extends Component {
         </Button>
         {!path && (
         <Drawer
-          title={title}
+          title={title && title}
           width={720}
           onClose={this.onClose}
           visible={visible}
@@ -62,7 +62,7 @@ DrawerButton.defaultProps = {
     icon: 'plus',
   },
   buttonTitle: 'NEW ROW',
-  title: 'ADD NEW ENTITY',
+  title: false,
   placement: 'right',
   path: null,
 };
@@ -78,7 +78,7 @@ DrawerButton.propTypes = {
   }),
   placement: propTypes.oneOf(['top', 'bottom', 'left', 'right']),
   path: propTypes.string,
-  title: propTypes.oneOfType([propTypes.string, propTypes.element]),
+  title: propTypes.oneOfType([propTypes.string, propTypes.element, propTypes.bool]),
 };
 
 export default withRouter(DrawerButton);

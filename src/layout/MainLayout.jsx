@@ -14,7 +14,7 @@ const MainLayout = ({ children }) => (
     <HeaderLayout />
     <Layout style={{ marginLeft: 200, marginTop: 64, background: '#F0F2F5' }}>
       <SiderLayout />
-      <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+      <Content>
         <div style={{ padding: 24, minHeight: 360 }}>
           {children}
           <BackTop />

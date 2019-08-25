@@ -17,6 +17,7 @@ const SiderLayout = ({ location: { pathname }, history }) => (
     <Menu
       defaultSelectedKeys={[pathname]}
       mode="inline"
+      style={{ background: colors['sider-background'] }}
     >
       <Menu.Item key="/">
         <Link className="layout__link" to="/">

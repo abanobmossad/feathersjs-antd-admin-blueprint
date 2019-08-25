@@ -12,7 +12,7 @@ import moment from 'moment';
 import MainLayout from '../MainLayout';
 import AuthRoute from '../AuthRoute';
 import Error500 from '../../pages/Error500';
-import TestCom from '../../examples/ListViewEx';
+import TestCom from '../../examples/DrawerButtonEx';
 // import for all routing components
 
 // change app language
