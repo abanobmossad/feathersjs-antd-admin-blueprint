@@ -1,9 +1,11 @@
 import React from 'react';
 import propTypes from 'prop-types';
 import { PageHeader as AntPageHeader, Typography, Icon } from 'antd';
+import { Helmet } from 'react-helmet';
+import config from '../../configs';
 
 const PageHeader = ({
-  title, extra, description, img, icon,
+  title, extra, description, img, icon, pageTitle,
 }) => (
   <AntPageHeader
     className="page__header"
@@ -17,6 +19,11 @@ const PageHeader = ({
 )}
     extra={extra}
   >
+    <Helmet>
+      <meta charSet="utf-8" />
+      <title>{pageTitle}</title>
+    </Helmet>
+
     <div className="page__wrap">
       <div className="page__content">
         <Typography.Paragraph>
@@ -42,10 +49,12 @@ PageHeader.defaultProps = {
   img: undefined,
   description: undefined,
   icon: undefined,
+  pageTitle: config.APP_NAME,
 };
 
 PageHeader.propTypes = {
   title: propTypes.oneOfType([propTypes.string, propTypes.element]).isRequired,
+  pageTitle: propTypes.string,
   extra: propTypes.element,
   img: propTypes.string,
   icon: propTypes.string,

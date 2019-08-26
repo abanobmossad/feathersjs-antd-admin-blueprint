@@ -18,7 +18,7 @@ import MainLayout from '../MainLayout';
 import AuthRoute from '../AuthRoute';
 import Error500 from '../../pages/Error500';
 import Login from '../../pages/Login';
-import TestCom from '../../examples/DrawerButtonEx';
+import TestCom from '../../examples/PageEx';
 // import for all routing components
 
 // change app language
