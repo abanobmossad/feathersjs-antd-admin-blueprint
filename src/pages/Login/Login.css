@@ -1,0 +1,27 @@
+:root {
+	--bg-color: #efefef;
+	--btn-color: #cacbcd;
+	--facebook-color: #304d8a;
+	--err-color: #e74c3c;
+	--google-color: #e74c3c;
+}
+.auth__wrapper {
+	width: 100vw;
+	height: 100vh;
+	background-color: var(--bg-color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.auth_card {
+	width: 34%;
+	box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15);
+}
+
+.auth__logo {
+	font-size: 3rem;
+  text-align: center;
+  margin-bottom: 5rem;
+}

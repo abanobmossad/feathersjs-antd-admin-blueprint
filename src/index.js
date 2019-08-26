@@ -4,11 +4,12 @@ import { init } from '@sentry/browser';
 import ErrorBoundary from './components/ErrorBoundary';
 import * as serviceWorker from './serviceWorker';
 import App from './layout/App';
+import configs from './configs';
 
 // initialize sentry integration
-if (process.env.NODE_ENV !== 'development') {
+if (process.env.NODE_ENV !== 'development' && configs.SENTRY_KEY) {
   init({
-    dsn: 'https://8da5aa81f65f4fa381cab36486c0cedf@sentry.io/1329946',
+    dsn: configs.SENTRY_KEY,
     integrations: (integrations) => integrations,
   });
 }

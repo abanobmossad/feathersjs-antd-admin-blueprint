@@ -1,41 +1,52 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { CookieStorage } from 'cookie-storage';
-import server from '../feathers';
+import { connect } from 'react-redux';
+import { Spin } from 'antd';
+import isEmpty from 'lodash/isEmpty';
+import propTypes from 'prop-types';
+import { authenticateUser } from '../ReduxStore/actions/authActions';
 
-const cookieStorage = new CookieStorage();
 
 /** protect admin views -- only logged in users allowed */
 class AuthRoute extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      isAuthenticated: false,
-    };
-  }
-
   componentDidMount() {
-    this.checkAuth();
+    const { authUser, authStatus } = this.props;
+    if (authStatus !== 'success') authUser();
   }
 
-  checkAuth = (props) => {
-    server.authenticate()
-      .then((res) => server.service('users').get('me'))
-      .then((user) => {
-        this.setState({ isAuthenticated: true, loading: false });
-      })
-      .catch((err) => {
-        cookieStorage.clear();
-        this.setState({ isAuthenticated: false, loading: false });
-      });
+  permitted = () => {
+    const { allowedPermissions, userPermissions } = this.props;
+    if (isEmpty(allowedPermissions)) return true;
+    if (userPermissions.some((p) => allowedPermissions.includes(p))) {
+      return true;
+    }
+    return false;
   }
 
   render() {
-    const { loading, isAuthenticated } = this.state;
-    if (isAuthenticated && !loading) return <Route {...this.props} />;
-    return !loading && <Redirect to="/login" />;
+    const { authStatus } = this.props;
+    if (authStatus === 'success') {
+      if (this.permitted()) return <Route {...this.props} />;
+      return <Redirect to="/404" />;
+    }
+    if (authStatus === 'failed') return <Redirect to="/login" />;
+    return <Spin size="large" style={{ margin: '45% 50%' }} />;
   }
 }
+AuthRoute.defaultProps = {
+  allowedPermissions: [],
+};
 
-export default AuthRoute;
+AuthRoute.propTypes = {
+  authStatus: propTypes.string.isRequired,
+  allowedPermissions: propTypes.array,
+  userPermissions: propTypes.array.isRequired,
+  authUser: propTypes.func.isRequired,
+};
+
+export default connect((state) => ({
+  authStatus: state.Auth.authStatus,
+  userPermissions: state.Auth.userPermissions,
+}), {
+  authUser: authenticateUser,
+})(AuthRoute);
