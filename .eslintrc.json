@@ -47,14 +47,8 @@
       "warn"
     ],
     "import/no-unresolved": [
-      "error",
-      {
-        "ignore": ["^meteor*"]
-      }
+      "error"
     ],
-    "import/prefer-default-export": "off",
-    "import/no-extraneous-dependencies": [
-      "off"
-    ]
+    "import/prefer-default-export": "off"
   }
 }

@@ -1,4 +1,3 @@
 import './PageHeader.css';
-import PageHeader from './PageHeader';
 
-export default PageHeader;
+export * as PageHeader from './PageHeader';

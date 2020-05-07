@@ -17,9 +17,12 @@ import ReduxStore from '../../ReduxStore';
 import MainLayout from '../MainLayout';
 import AuthRoute from '../AuthRoute';
 import Error500 from '../../pages/Error500';
+import NotFound from '../../pages/NotFound';
 import Login from '../../pages/Login';
-import TestCom from '../../examples/PageEx';
+import ResetPassword from '../../pages/ResetPassword';
+
 // import for all routing components
+import { generateSecureRoutes } from '../../utils/generate-pages';
 
 // change app language
 const langConfig = {
@@ -29,6 +32,7 @@ const langConfig = {
     ar_EG,
   }[navigator.language],
 };
+
 moment.locale(langConfig.intl);
 
 const App = () => (
@@ -39,16 +43,15 @@ const App = () => (
         <BrowserRouter>
           <Switch>
             {/* authentication routes  (without navbar and footer) */}
-            <Route exact path="/enroll/:token" />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/404" />
+            <Route exact path="/reset-password/:token" component={ResetPassword} />
+            <Route exact path="/404" component={NotFound} />
             {/* Routes for the main layout (with navbar and footer) */}
             <MainLayout>
               <Switch>
-                <AuthRoute exact path="/test" component={TestCom} />
-
+                {generateSecureRoutes()}
                 {/* Error pages */}
-                <Route exact path="/500" component={Error500} />
+                <AuthRoute exact path="/500" component={Error500} />
                 <Route exact path="/" />
                 <Redirect exact from="*" to="/404" />
               </Switch>

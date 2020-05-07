@@ -1,11 +1,14 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+
 * {
 	margin: 0;
 	padding: 0;
-	font-family: Arial, sans-serif;
+	font-family: "Roboto", sans-serif;
 }
 
 html {
 	font-size: 63.5%;
+	scroll-behavior: smooth;
 }
 
 .container {
@@ -17,6 +20,14 @@ html {
 	display: flex;
 }
 
+.justify-between {
+	justify-content: space-between;
+}
+
+.flex .ant-form-item {
+	margin: 5px; /* and that, will result in a 10px gap */
+}
+
 .column {
 	flex-direction: column;
 }
@@ -25,8 +36,16 @@ html {
 	flex-direction: row;
 }
 
+.flex-fill {
+	flex: 0 0 100%;
+}
+
 .fill {
 	width: 100%;
+}
+
+.flex-wrap {
+	flex-wrap: wrap;
 }
 
 .form-group {
@@ -34,4 +53,15 @@ html {
 }
 .view__actions button {
 	margin-right: 1rem;
+}
+
+.form__select {
+	width: 25%;
+}
+
+.card-shad {
+	box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11),
+		0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06),
+		0 7px 70px rgba(90, 97, 105, 0.1);
+	border-radius: 3px;
 }

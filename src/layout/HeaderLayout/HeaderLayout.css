@@ -8,16 +8,14 @@
 }
 .layout__header__item {
 	float: right;
+	margin-left: 4rem;
 }
 .layout__logo {
-	margin: 0 -38px;
+	margin: 0 -23px;
 	float: left;
 }
 .layout__logo img {
-	border-radius: 50%;
 	margin: 0 0.5rem;
-	width: 52;
-	height: 52;
 }
 
 .layout__logo a {
@@ -26,7 +24,9 @@
 	text-decoration: none;
 }
 
-.layout__header__profile-menu {
-	line-height: 64px;
-	height: 1px;
+
+.search__bar-input, input:focus {
+	box-shadow: none !important;
+	outline: none !important;
+	border: none !important;
 }

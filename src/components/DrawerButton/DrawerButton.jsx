@@ -1,57 +1,96 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Button, Drawer, Icon } from 'antd';
+import {
+  Button, Drawer, Icon, Tooltip, Typography,
+} from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 class DrawerButton extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      visible: false,
-    };
+    const { width } = this.props;
+    this.state = { visible: false, width, isResizing: false };
   }
 
-  showDrawer = () => {
-    this.setState({
-      visible: true,
-    });
-  };
+  componentDidMount() {
+    window.addEventListener('mousemove', this.resizing, false);
+    window.addEventListener('mouseup', this.stopResizing, false);
+    window.addEventListener('mouseleave', this.stopResizing, false);
+  }
 
-  onClose = () => {
-    this.setState({
-      visible: false,
-    });
-  };
+  showDrawer = () => { this.setState({ visible: true }); };
+
+  onClose = () => { this.setState({ visible: false }); };
+
+  resizing = (e) => {
+    const { clientX } = e;
+    const stopResizingWidth = 500;
+    const { isResizing } = this.state;
+    if (isResizing) {
+      const calcWidth = window.innerWidth - (clientX);
+      if (calcWidth > stopResizingWidth) this.setState({ width: Math.ceil(calcWidth) });
+    }
+  }
+
+  startResizing = () => {
+    this.setState({ isResizing: true });
+  }
+
+  stopResizing = (e) => {
+    this.setState({ isResizing: false });
+  }
 
   render() {
     const { visible } = this.state;
     const {
-      buttonTitle, buttonProps, title, content, placement, path, history,
+      buttonTitle, buttonProps, title, content,
+      placement, path, history, style, resizable,
     } = this.props;
+    const { width } = this.state;
+
     return (
-      <div>
+      <>
         <Button
           shape={buttonProps.shape}
           type={buttonProps.type}
-          onClick={path ? () => history.push(path) : this.showDrawer}
+          onClick={this.showDrawer}
+          style={style}
         >
           <Icon type={buttonProps.icon} />
           {' '}
-          {buttonTitle}
+          {buttonTitle && buttonTitle}
         </Button>
-        {!path && (
         <Drawer
-          title={title && title}
-          width={720}
+          title={(
+            <div className="flex row" style={{ marginTop: 2 }}>
+              <Typography.Title level={4}>{title && title}</Typography.Title>
+              {path && (
+                <Tooltip placement="right" title={<FormattedMessage id="Drawer.open.tip" defaultMessage="Open on new window" />}>
+                  <Button type="link" onClick={() => history.push(path)}>
+                    <Icon type="fullscreen" style={{ fontSize: 16 }} />
+                  </Button>
+                </Tooltip>
+              )}
+            </div>
+          )}
+          width={width}
           onClose={this.onClose}
           visible={visible}
           destroyOnClose
           placement={placement}
         >
+          {/* render resizing `like` button */}
+          {/* Show the resizer only if it is View drawer */}
+          {resizable && (
+          <div className="resizable-drawer">
+            <Icon type="more" onMouseDown={this.startResizing} style={{ fontSize: 35 }} />
+          </div>
+          )}
+          {/* load content */}
           {content(this.onClose)}
         </Drawer>
-        )}
-      </div>
+      </>
     );
   }
 }
@@ -65,12 +104,15 @@ DrawerButton.defaultProps = {
   title: false,
   placement: 'right',
   path: null,
+  width: 720,
+  style: null,
+  resizable: false,
 };
 
 DrawerButton.propTypes = {
   history: propTypes.instanceOf(Object).isRequired,
   content: propTypes.func.isRequired,
-  buttonTitle: propTypes.oneOfType([propTypes.string, propTypes.element]),
+  buttonTitle: propTypes.oneOfType([propTypes.bool, propTypes.string, propTypes.element]),
   buttonProps: propTypes.shape({
     icon: propTypes.string,
     type: propTypes.string,
@@ -79,6 +121,10 @@ DrawerButton.propTypes = {
   placement: propTypes.oneOf(['top', 'bottom', 'left', 'right']),
   path: propTypes.string,
   title: propTypes.oneOfType([propTypes.string, propTypes.element, propTypes.bool]),
+  width: propTypes.number,
+  resizable: propTypes.bool,
+  style: propTypes.instanceOf(Object),
 };
+
 
 export default withRouter(DrawerButton);

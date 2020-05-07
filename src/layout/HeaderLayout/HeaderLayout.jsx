@@ -1,12 +1,9 @@
 import React from 'react';
-import {
-  Layout, Menu, Icon,
-} from 'antd';
+import { Layout } from 'antd';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
 import ProfileMenu from '../../components/ProfileMenu';
-import UserAvatar from '../../components/UserAvatar';
 import config from '../../configs';
+import SearchInput from '../../pages/Search/SearchInput';
 
 const colors = require('../../configs/colors');
 
@@ -21,34 +18,24 @@ const HeaderLayout = () => (
     <div className="layout__logo">
       <Link to="/">
         <img src={config.APP_LOGO_PATH} alt="LOGO" width="52" height="52" />
-        <FormattedMessage id="appName" defaultMessage={config.APP_NAME} />
       </Link>
     </div>
 
     {/* Add more header items here ...  */}
 
+
+    {/* Add search pages functionality */}
+    <SearchInput />
+
+    {/* settings */}
+    {/* <Settings className="layout__header__item" /> */}
+
     {/* profile menu */}
-    <Menu
-      className="layout__header__profile-menu"
-      mode="horizontal"
-      style={{ lineHeight: '64px', borderBottomColor: colors['header-background'] }}
-    >
-      {/* profile */}
-      <Menu.SubMenu
-        className="layout__header__item"
-        key="profile"
-        title={(
-          <>
-            <UserAvatar user={{ firstName: 'abanob', lastName: 'mossad' }} showIdentifier />
-            <Icon type="caret-down" />
-          </>
-          )}
-      >
-        <ProfileMenu />
-      </Menu.SubMenu>
-    </Menu>
+    <ProfileMenu className="layout__header__item" />
+
+
+    {/* <Notifications className="layout__header__item" messageIndexName="messageAr" /> */}
   </Layout.Header>
 );
-
 
 export default HeaderLayout;

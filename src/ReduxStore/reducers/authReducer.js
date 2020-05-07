@@ -1,5 +1,4 @@
 import { AUTH_USER_FAILED, AUTH_USER_SUCCESS } from '../actions/types';
-import configs from '../../configs';
 
 const initialState = {
   user: null,
@@ -13,7 +12,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         user: action.payload,
-        userPermissions: action.payload[configs.USER_ROLES_PROP_NAME],
         authStatus: 'success',
       };
     case AUTH_USER_FAILED:
@@ -21,7 +19,6 @@ export default function (state = initialState, action) {
         ...state,
         authStatus: 'failed',
       };
-
     default:
       return state;
   }

@@ -1,0 +1,23 @@
+.fileUpload__wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 173px;
+ }
+
+.fileUpload__upload-btn-wrapper {
+  margin-top: .6rem;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.fileUpload__upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+  opacity: 0;
+}

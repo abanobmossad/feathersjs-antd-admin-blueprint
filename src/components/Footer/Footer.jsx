@@ -11,7 +11,7 @@ const Footer = () => (
       <p className="footer__credits">
         <FormattedMessage
           id="footer.credits"
-          defaultMessage="Antd Admin blueprint ©2019 created by abanob mossad"
+          defaultMessage="FeathersJs-Antd Admin blueprint ©2020 created by abanob mossad"
         />
       </p>
       <div className="footer__version">

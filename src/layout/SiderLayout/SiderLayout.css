@@ -1,11 +1,23 @@
-.layout__sider{
-  overflow: auto;
-  height: 100vh;
-  position: fixed;
-  left: 0;
+.layout__sider {
+	height: 100vh;
+	overflow: hidden;
+	position: sticky;
+	top: 0;
+	left: 0;
 }
-.layout__link{
-  font-weight: 100;
-  font-size: 1.5rem;
-  color: #fff;
+
+.layout__sider-scroller {
+	width: 247px;
+	height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.layout__link {
+	font-weight: 500;
+}
+
+/* Change background for the collapsible div  */
+.ant-layout-sider-trigger{
+	background-color: #2980b9;
 }

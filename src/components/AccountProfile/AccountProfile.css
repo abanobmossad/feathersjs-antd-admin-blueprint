@@ -1,0 +1,16 @@
+.profile__avatar {
+	text-align: center;
+	margin-bottom: 5rem;
+}
+
+.profile__content{
+  margin: 0 7%;
+  display: flex;
+  justify-content: space-between;
+}
+.profile__cards-left {
+  width: 300px
+}
+.profile__cards-right {
+  width: 500px;
+}

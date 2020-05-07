@@ -1,29 +1,26 @@
 import React from 'react';
 import propTypes from 'prop-types';
 import { PageHeader as AntPageHeader, Typography, Icon } from 'antd';
-import { Helmet } from 'react-helmet';
 import config from '../../configs';
+import colors from '../../configs/colors';
+import { setPageTitle } from '../../utils/helpers';
 
 const PageHeader = ({
   title, extra, description, img, icon, pageTitle,
 }) => (
   <AntPageHeader
     className="page__header"
-    style={{ margin: '-24px' }}
+    style={{ margin: '-24px -24px 10px -24px' }}
     title={(
-      <>
+      <span style={{ color: colors['pages-headers'] }}>
         {icon && <Icon type={icon} /> }
         {icon && '  '}
         {title}
-      </>
+      </span>
 )}
     extra={extra}
   >
-    <Helmet>
-      <meta charSet="utf-8" />
-      <title>{pageTitle}</title>
-    </Helmet>
-
+    {setPageTitle(pageTitle)}
     <div className="page__wrap">
       <div className="page__content">
         <Typography.Paragraph>
@@ -36,6 +33,7 @@ const PageHeader = ({
           <img
             width="100%"
             src={img}
+            height="150"
             alt="content img description"
           />
           )}
@@ -44,6 +42,7 @@ const PageHeader = ({
     </div>
   </AntPageHeader>
 );
+
 PageHeader.defaultProps = {
   extra: undefined,
   img: undefined,

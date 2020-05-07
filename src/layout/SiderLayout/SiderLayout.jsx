@@ -1,47 +1,46 @@
 import React from 'react';
 import protoTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import {
-  Layout, Menu, Icon,
+  Layout, Menu,
 } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import { generateSiderItems } from '../../utils/generate-pages';
 
 const colors = require('../../configs/colors');
 
 /** The app side bar */
-const SiderLayout = ({ location: { pathname }, history }) => (
+const SiderLayout = ({ location: { pathname }, userPermissions }) => (
   <Layout.Sider
     style={{ background: colors['sider-background'] }}
     className="layout__sider"
+    width={230}
+    collapsible
   >
-    <Menu
-      defaultSelectedKeys={[pathname]}
-      mode="inline"
-      style={{ background: colors['sider-background'] }}
-    >
-      <Menu.Item key="/">
-        <Link className="layout__link" to="/">
-          <Icon type="dashboard" />
-          <FormattedMessage id="sideBar.dashboard" defaultMessage="Dashboard" />
-        </Link>
-      </Menu.Item>
-
-      <Menu.Item key="/test">
-        <Link className="layout__link" to="/test">
-          <Icon type="dashboard" />
-          <FormattedMessage id="sideBar.test" defaultMessage="test" />
-        </Link>
-      </Menu.Item>
-
-      {/* Add more custom menu items here ... */}
-    </Menu>
+    {/* make the side bar scrollable and hide the scrollbar */}
+    <div className="layout__sider-scroller">
+      <Menu
+        defaultSelectedKeys={[pathname]}
+        mode="inline"
+        style={{
+          background: colors['sider-background'],
+          borderRight: 0,
+          paddingBottom: '10rem',
+        }}
+      >
+        {generateSiderItems(userPermissions)}
+        {/* Add more custom menu items here ... */}
+      </Menu>
+    </div>
 
   </Layout.Sider>
 );
 
 SiderLayout.propTypes = {
   location: protoTypes.instanceOf(Object).isRequired,
-  history: protoTypes.instanceOf(Object).isRequired,
+  userPermissions: protoTypes.array.isRequired,
 };
 
-export default withRouter(SiderLayout);
+export default connect((state) => ({
+  userPermissions: state.Auth.userPermissions,
+}))(withRouter(SiderLayout));
