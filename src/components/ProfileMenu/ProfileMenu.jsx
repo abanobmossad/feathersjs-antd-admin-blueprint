@@ -1,9 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import {
-  Menu, Dropdown, Avatar,
-} from 'antd';
-import Icon from 'react-fontawesome';
+import { Menu, Dropdown, Avatar } from 'antd';
+import { UserOutlined, LogoutOutlined, CaretDownOutlined } from '@ant-design/icons';
 import propTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
@@ -17,13 +15,13 @@ const logout = (history) => {
 const renderMenu = (history) => (
   <Menu mode="vertical" style={{ width: 140 }}>
     <Menu.Item key="1" onClick={() => history.push('/profile')}>
-      <Icon name="user" />
+      <UserOutlined />
       {' '}
       <FormattedMessage id="profileMenu.myAccount" defaultMessage="My Account" />
     </Menu.Item>
     <Menu.Divider />
     <Menu.Item key="2" onClick={() => logout(history)}>
-      <Icon name="sign-out" />
+      <LogoutOutlined />
       {' '}
       <FormattedMessage id="profileMenu.logout" defaultMessage="Logout" />
     </Menu.Item>
@@ -38,10 +36,11 @@ const ProfileMenu = ({ history, currentUser, className }) => (
     trigger={['click']}
   >
     <div className={className} style={{ cursor: 'pointer' }}>
-      <Avatar style={{ marginRight: '1rem', backgroundColor: '#d35400' }}>
-        {currentUser.fullName[0].toUpperCase()}
+      <Avatar style={{ backgroundColor: '#6c5ce7' }}>
+        {currentUser.displayName[0].toUpperCase()}
       </Avatar>
-      <Icon name="caret-down" />
+      <span style={{ margin: '0 1rem', fontSize: '1.5rem' }}>{currentUser.displayName}</span>
+      <CaretDownOutlined />
     </div>
   </Dropdown>
 );

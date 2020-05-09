@@ -1,59 +1,48 @@
 import React from 'react';
 import { Menu } from 'antd';
-import Icon from 'react-fontawesome';
 import { Link } from 'react-router-dom';
-import pagesObj from '../configs/pages';
+import pagesSpecs from '../configs/pages';
 import AuthRoute from '../layout/AuthRoute';
 
-export const generateSecureRoutes = (pages = pagesObj) => pages.map((page) => {
-  if (page.supPages) return generateSecureRoutes(page.supPages);
-  return (
-    <AuthRoute
-      exact
-      key={page.path}
-      path={page.path}
-      component={() => (
-        <page.component
-          title={page.title}
-          icon={page.icon}
-          description={page.description}
-          banner={page.banner && `/images/${page.banner}`}
-          {...page.props || {}}
-        />
-      )}
-    />
-  );
-});
+const getSpecs = (page) => {
+  if (page.pageSpecs) {
+    return { ...page.pageSpecs, component: page };
+  }
+  return page;
+};
 
 
-export const generateSiderItems = (userPermissions, pages = pagesObj) => pages
-  .filter((p) => !p.hideInMenu)
+export const generateSecureRoutes = (pages = pagesSpecs) => pages
   .map((page) => {
-    if (page.supPages) {
+    const {
+      path, supPages, component: Component, props,
+    } = getSpecs(page);
+    if (supPages) return generateSecureRoutes(supPages);
+    return (
+      <AuthRoute exact key={path} path={path} component={() => <Component {...props} />} />
+    );
+  });
+
+
+export const generateSiderItems = (user, pages = pagesSpecs) => pages
+  .filter((p) => (p.pageSpecs ? !p.pageSpecs.hideInMenu : !p.hideInMenu))
+  .map((page) => {
+    const {
+      path, icon, supPages, title,
+    } = getSpecs(page);
+
+    if (supPages) {
       return (
-        <Menu.SubMenu
-          key={page.path}
-          style={{ fontSize: 14 }}
-          icon={<Icon name={page.icon} style={page.iconColor && { color: page.iconColor }} />}
-          title={(
-            <span>
-              <span>{page.title.toUpperCase()}</span>
-            </span>
-              )}
-        >
-          {generateSiderItems(userPermissions, page.supPages)}
+        <Menu.SubMenu key={path} icon={icon} title={title}>
+          {generateSiderItems(user, supPages)}
         </Menu.SubMenu>
       );
     }
     return (
-      <Menu.Item
-        icon={<Icon name={page.icon} style={page.iconColor && { color: page.iconColor }} />}
-        key={page.path}
-        style={{ fontSize: 14 }}
-      >
-        <Link className="layout__link" to={page.path}>
-          {' '}
-          <span>{page.title.toUpperCase()}</span>
+      <Menu.Item key={path} style={{ fontSize: 14 }}>
+        <Link to={path}>
+          {icon}
+          <span>{title}</span>
         </Link>
       </Menu.Item>
     );

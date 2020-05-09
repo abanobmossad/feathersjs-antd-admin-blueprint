@@ -2,7 +2,7 @@
   "plugins": [
     ["import", { "libraryName": "antd", "style": true }],
     ["react-intl", {
-      "messagesDir": "build/locales/messages/"
+      "messagesDir": "src/locales/messages/"
     }]
   ]
 

@@ -10,7 +10,7 @@ import { generateSiderItems } from '../../utils/generate-pages';
 const colors = require('../../configs/colors');
 
 /** The app side bar */
-const SiderLayout = ({ location: { pathname }, userPermissions }) => (
+const SiderLayout = ({ location: { pathname }, user }) => (
   <Layout.Sider
     style={{ background: colors['sider-background'] }}
     className="layout__sider"
@@ -28,7 +28,7 @@ const SiderLayout = ({ location: { pathname }, userPermissions }) => (
           paddingBottom: '10rem',
         }}
       >
-        {generateSiderItems(userPermissions)}
+        {generateSiderItems(user)}
         {/* Add more custom menu items here ... */}
       </Menu>
     </div>
@@ -38,9 +38,9 @@ const SiderLayout = ({ location: { pathname }, userPermissions }) => (
 
 SiderLayout.propTypes = {
   location: protoTypes.instanceOf(Object).isRequired,
-  userPermissions: protoTypes.array.isRequired,
+  user: protoTypes.instanceOf(Object).isRequired,
 };
 
 export default connect((state) => ({
-  userPermissions: state.Auth.userPermissions,
+  user: state.Auth.user,
 }))(withRouter(SiderLayout));

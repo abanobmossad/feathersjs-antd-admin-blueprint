@@ -1,3 +1,3 @@
 import './PageHeader.css';
 
-export * as PageHeader from './PageHeader';
+export { default } from './PageHeader';

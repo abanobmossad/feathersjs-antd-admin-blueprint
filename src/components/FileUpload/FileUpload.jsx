@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {
-  Avatar, Button, Icon, message,
+  Avatar, Button, message,
 } from 'antd';
 import propTypes from 'prop-types';
+import { UploadOutlined } from '@ant-design/icons';
 import { FormattedMessage } from 'react-intl';
 import { viewFile } from '../../utils/helpers';
 
@@ -54,7 +55,7 @@ class FileUpload extends Component {
         <Avatar shape="square" src={imageUrl || (fileUri && viewFile(fileUri))} icon="picture" alt="File" size={135} />
         <div className="fileUpload__upload-btn-wrapper">
           <Button style={{ width: '13.5rem' }}>
-            <Icon type="upload" />
+            <UploadOutlined />
             {' '}
             <FormattedMessage id="fileUpload.uploadBtn" defaultMessage="Upload" />
           </Button>

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {
   Input, Button, Modal, message,
 } from 'antd';
-import Icon from 'react-fontawesome';
-import { FormattedMessage } from 'react-intl';
-import server from '../../feathers';
 
+import { FormattedMessage } from 'react-intl';
+import { QuestionCircleOutlined, MailOutlined } from '@ant-design/icons';
+import server from '../../feathers';
 
 class ForgotModal extends Component {
   constructor(props) {
@@ -63,7 +63,7 @@ class ForgotModal extends Component {
         <Modal
           title={(
             <>
-              <Icon name="question-circle" />
+              <QuestionCircleOutlined />
               {' '}
               <FormattedMessage id="resetPassword.forgotPass" defaultMessage="Forgot password" />
             </>
@@ -82,7 +82,7 @@ class ForgotModal extends Component {
             value={email}
             size="large"
             disabled={sending}
-            prefix={<Icon name="envelope" style={{ color: 'rgba(0,0,0,.25)' }} />}
+            prefix={<MailOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
             placeholder="myemail@example.com"
             onChange={(e) => { this.setState({ email: e.target.value, error: null }); }}
           />

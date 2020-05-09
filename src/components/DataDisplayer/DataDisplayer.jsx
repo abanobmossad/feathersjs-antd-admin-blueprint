@@ -2,17 +2,21 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import propTypes from 'prop-types';
 import isArray from 'lodash/isArray';
-import isFunction from 'lodash/isFunction';
 import forIn from 'lodash/forIn';
+import isFunction from 'lodash/isFunction';
 import flatten from 'lodash/flatten';
 import isEmpty from 'lodash/isEmpty';
 import {
   Table, message, Card, Radio, Tooltip, Modal,
-  List, Button, Alert, Popconfirm, Collapse, Icon, notification, Tag,
+  List, Button, Alert, Popconfirm, Collapse, notification, Tag,
 } from 'antd';
-import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
+import {
+  DeleteOutlined, CaretRightOutlined, NumberOutlined,
+  ReloadOutlined, PauseOutlined, CheckOutlined,
+} from '@ant-design/icons';
+import { FormattedMessage } from 'react-intl';
 import server from '../../feathers';
-import { eventEmitter } from '../../utils/event-emitter';
+import PageHeader from '../PageHeader';
 import renderListItem from './render-list-item';
 import ErrorMessage from '../ErrorMessage';
 import { updateArray } from '../../utils/helpers';
@@ -35,7 +39,7 @@ class DataDisplayer extends Component {
     this.pagination = {
       defaultCurrent: 0,
       showSizeChanger: true,
-      showTotal: (total) => `Total ${total}`,
+      showTotal: (total) => <Tag icon={<NumberOutlined />} color="#2d3436">{total}</Tag>,
       onChange: (page, pageSize) => {
         // get new next paginated data
         this.fetchData(page, pageSize);
@@ -55,8 +59,6 @@ class DataDisplayer extends Component {
     this.fetchData();
   }
 
-  // fix admins and users trans
-
   updateDataEvents = () => {
     const { allowRealTime } = this.props;
 
@@ -66,7 +68,7 @@ class DataDisplayer extends Component {
     };
 
     if (!allowRealTime) {
-      eventEmitter.on(`create-${this.endpoint}`, (data) => {
+      window.eventEmitter.on(`create-${this.endpoint}`, (data) => {
         this.setState((prevState) => ({
           data: isArray(data)
             ? [...data, ...prevState.data]
@@ -98,14 +100,19 @@ class DataDisplayer extends Component {
                 <Button
                   type="primary"
                   size="small"
-                  icon="check"
+                  icon={<CheckOutlined />}
                   style={{ marginRight: '2rem' }}
                   onClick={() => updateStatus('enabled')}
                 >
                   Enable
                 </Button>
-                <Button icon="pause" type="dashed" size="small" onClick={() => updateStatus('disabled')}>
-                   Disable
+                <Button
+                  icon={<PauseOutlined />}
+                  type="dashed"
+                  size="small"
+                  onClick={() => updateStatus('disabled')}
+                >
+                  Disable
                 </Button>
               </>
             ),
@@ -118,7 +125,7 @@ class DataDisplayer extends Component {
       });
     }
 
-    eventEmitter.on(`update-${this.endpoint}`, (updatedEntity) => {
+    window.eventEmitter.on(`update-${this.endpoint}`, (updatedEntity) => {
       this.setState((prevState) => ({
         data: updateArray(prevState.data, updatedEntity.id, updatedEntity),
       }));
@@ -130,7 +137,7 @@ class DataDisplayer extends Component {
     const { size } = this.props;
     return (
       <>
-        <Tooltip title={<FormattedMessage id="switchView.tip" defaultMessage="Switch the view" />}>
+        <Tooltip title={<FormattedMessage id="dataDisplayer.switchView.tip" defaultMessage="Switch the view" />}>
           <Radio.Group
             size={size}
             value={currentView}
@@ -145,7 +152,7 @@ class DataDisplayer extends Component {
         <Tooltip title={<FormattedMessage id="dataDisplayer.reload.tip" defaultMessage="Reload data" />}>
           <Button
             style={{ marginLeft: '1rem' }}
-            icon="reload"
+            icon={<ReloadOutlined />}
             size="small"
             type="link"
             loading={loading}
@@ -156,27 +163,6 @@ class DataDisplayer extends Component {
       </>
     );
   }
-
-  renderRemoveBtn = ({ id }) => (
-    <Tooltip title="Remove">
-      <Button
-        onClick={() => {
-          Modal.confirm({
-            title: 'Do you really want to delete this item?',
-            okType: 'danger',
-            okText: 'Delete',
-            content: <span>This item will be deleted permanently</span>,
-            onOk: () => { this.handleDelete(id); },
-            onCancel() {},
-          });
-        }}
-        type="link"
-        shape="circle-outline"
-      >
-        <Icon type="delete" />
-      </Button>
-    </Tooltip>
-  )
 
   reloadData = (filters = {}) => {
     const { currentPage } = this.state;
@@ -237,7 +223,7 @@ class DataDisplayer extends Component {
 
   fetchData(page, pageSize = 10, queryFilters) {
     const { query } = this.props;
-    const $sort = this.endpoint === 'countries' ? {} : { updated_at: -1 };
+    const $sort = { updatedAt: -1 };
     server.service(this.endpoint).find({
       query: {
         $skip: ((page && page - 1) || 0) * pageSize,
@@ -259,11 +245,30 @@ class DataDisplayer extends Component {
   }
 
   renderRemoveAction = (record) => {
-    const { removeBtn: { show }, entityKey } = this.props;
-    if (isFunction(show)) {
-      return show(record) === true && this.renderRemoveBtn({ id: record[entityKey] });
-    }
-    return show && this.renderRemoveBtn({ id: record[entityKey] });
+    const { removeBtn, entityKey } = this.props;
+    const id = record[entityKey];
+    const show = isFunction(removeBtn) ? removeBtn(record) : removeBtn;
+    if (!show) return null;
+    return (
+      <Tooltip title="Remove" key={id}>
+        <Button
+          onClick={() => {
+            Modal.confirm({
+              title: 'Do you really want to delete this item?',
+              okType: 'danger',
+              okText: 'Delete',
+              content: <span>This item will be deleted permanently</span>,
+              onOk: () => { this.handleDelete(id); },
+              onCancel() {},
+            });
+          }}
+          type="link"
+          shape="circle-outline"
+        >
+          <DeleteOutlined />
+        </Button>
+      </Tooltip>
+    );
   }
 
   renderActions = (actions) => {
@@ -289,7 +294,7 @@ class DataDisplayer extends Component {
       render: (record) => {
         const acts = actions(record);
         const rmv = this.renderRemoveAction(record);
-        if (!acts && !rmv) {
+        if (acts.length === 0 && !rmv) {
           return <Tag>NO ACTIONS</Tag>;
         }
         return [...this.renderActions(acts), rmv];
@@ -303,7 +308,6 @@ class DataDisplayer extends Component {
         loading={loading}
         rowKey={(record) => record[entityKey]}
         size={size}
-        scroll={{ x: size === 'small' }}
         rowSelection={this.rowSelectionAction()}
         rowClassName="table__row"
         onChange={this.handleFiltersChange}
@@ -357,7 +361,7 @@ class DataDisplayer extends Component {
         <Collapse
           style={{ marginBottom: '2rem' }}
           bordered={false}
-          expandIcon={({ isActive }) => <Icon type="caret-right" rotate={isActive ? 90 : 0} />}
+          expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
         >
           <Collapse.Panel
             key="1"
@@ -373,12 +377,17 @@ class DataDisplayer extends Component {
 
   render() {
     const { currentView, selectedKeys } = this.state;
-    const { size } = this.props;
+    const { size, showHeader, pageHeader } = this.props;
     const hasSelected = !isEmpty(selectedKeys);
     return (
       <>
+        {/* render pager header id showHeader is true and props found */}
+        {showHeader && pageHeader && <PageHeader {...pageHeader} />}
+        {/* render filters section */}
         {this.renderFiltersSection()}
+        {/* render view (table or list) */}
         <Card
+          className="card-shad"
           size={size}
           bordered={size !== 'small'}
           title={hasSelected && (
@@ -388,24 +397,28 @@ class DataDisplayer extends Component {
             type="info"
             message={(
               <>
-                <span style={{ marginRight: 8 }}>
-                  <FormattedHTMLMessage
-                    id="switchView.deleteMany.number"
-                    values={{ itemsNumber: selectedKeys.length }}
-                    defaultMessage={`Selected <b>${selectedKeys.length}<b/>`}
-                  />
-                </span>
+                <FormattedMessage
+                  id="dataDisplayer.deleteMany.number"
+                  values={{ itemsNumber: selectedKeys.length }}
+                  defaultMessage="Selected {itemNumber}"
+                >
+                  {(txt) => (
+                    <span style={{ marginRight: 8 }}>
+                      <b>{txt}</b>
+                    </span>
+                  )}
+                </FormattedMessage>
                 <Popconfirm
                   onConfirm={this.handleDeleteMany}
                   title={(
                     <FormattedMessage
-                      id="switchView.deleteMany.title"
+                      id="dataDisplayer.deleteMany.title"
                       defaultMessage="Sure you want to delete this rows?"
                     />
                     )}
                 >
                   <Button type="link">
-                    <b><FormattedMessage id="switchView.deleteMany" defaultMessage="delete" /></b>
+                    <b><FormattedMessage id="dataDisplayer.deleteMany" defaultMessage="delete" /></b>
                   </Button>
                 </Popconfirm>
               </>
@@ -414,14 +427,12 @@ class DataDisplayer extends Component {
           )}
           extra={this.renderSwitchButtons()}
         >
-          {currentView === 'table'
-            ? this.renderViewAsTable() : this.renderViewAsList()}
+          {currentView === 'table' ? this.renderViewAsTable() : this.renderViewAsList()}
         </Card>
       </>
     );
   }
 }
-
 
 DataDisplayer.defaultProps = {
   query: {},
@@ -434,13 +445,10 @@ DataDisplayer.defaultProps = {
   entityKey: 'id',
   filtersTitle: 'Filters',
   actions: () => {},
-  removeBtn: {
-    show: true,
-    soft: false,
-    permissions: [],
-  },
+  removeBtn: true,
+  showHeader: true,
+  pageHeader: {},
 };
-
 
 DataDisplayer.propTypes = {
   history: propTypes.instanceOf(Object).isRequired,
@@ -453,16 +461,15 @@ DataDisplayer.propTypes = {
   allowRealTime: propTypes.bool,
   filtersComponent: propTypes.func,
   filtersTitle: propTypes.oneOfType([propTypes.string, propTypes.element]),
-  multiDelete: propTypes.oneOfType([propTypes.bool, propTypes.array]),
+  multiDelete: propTypes.bool,
   size: propTypes.oneOf(['default', 'small', 'middle']),
   actions: propTypes.func,
-  removeBtn: propTypes.shape({
-    show: propTypes.oneOfType([propTypes.bool, propTypes.func]),
-    permissions: propTypes.array,
-    soft: propTypes.bool,
-    message: propTypes.oneOfType([propTypes.string, propTypes.element]),
-  }),
+  removeBtn: propTypes.oneOfType([
+    propTypes.bool, propTypes.func,
+    propTypes.string, propTypes.element,
+  ]),
+  showHeader: propTypes.bool,
+  pageHeader: propTypes.instanceOf(Object),
 };
-
 
 export default withRouter(DataDisplayer);

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
-  Form, Input, Icon, Button, message,
+  Form, Input, Button, message,
 } from 'antd';
+import { ProfileOutlined } from '@ant-design/icons';
 import propTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import ErrorMessage from '../ErrorMessage';
@@ -47,19 +48,24 @@ class AccountForm extends Component {
   }
 
   render() {
-    const { form: { getFieldDecorator } } = this.props;
     const { avatarUri } = this.state;
-
     return (
       <Form onSubmit={this.handleSubmit}>
         <div className="flex row">
-          <Form.Item label={<FormattedMessage id="accountProfile.data.fullName" defaultMessage="Full name" />}>
-            {getFieldDecorator('fullName')(
-              <Input
-                disabled
-                prefix={<Icon type="profile" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              />,
-            )}
+          <Form.Item
+            name="name"
+            label={(
+              <FormattedMessage
+                id="accountProfile.data.name"
+                defaultMessage="Full name"
+              />
+              )}
+          >
+            <Input
+              disabled
+              prefix={<ProfileOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
+            />
+            ,
           </Form.Item>
           {/* Logo upload */}
           <FileUpload
