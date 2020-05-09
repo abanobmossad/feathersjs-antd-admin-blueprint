@@ -33,8 +33,7 @@ const renderSplashScreen = () => (
     className="auth__wrapper flex"
     style={{ flexDirection: 'row' }}
   >
-    <img src={config.APP_LOGO_PATH} alt="Logo" width="100" height="100" />
-    <p style={{ fontSize: '6rem', margin: '0 2rem' }}>{config.APP_NAME}</p>
+    <img src={config.APP_LOGO_PATH} alt="Logo" />
     <Spin size="large" />
   </div>
 );

@@ -17,7 +17,7 @@ const HeaderLayout = () => (
     {/* EDIT Logo style in the css file and here */}
     <div className="layout__logo">
       <Link to="/">
-        <img src={config.APP_LOGO_PATH} alt="LOGO" width="52" height="52" />
+        <img src={config.APP_LOGO_PATH} alt="LOGO" width="200" height="52" />
       </Link>
     </div>
 

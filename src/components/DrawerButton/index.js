@@ -1,3 +1,1 @@
-import DrawerButton from './DrawerButton';
-
-export default DrawerButton;
+export { default } from './DrawerButton';

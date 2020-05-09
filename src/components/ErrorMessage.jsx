@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Result } from 'antd';
 
-export const ErrorMessage = (error) => {
+const ErrorMessage = (error) => {
   if (error.code === 403) {
     return Modal.error({
       icon: false,
@@ -92,3 +92,6 @@ export const ErrorMessage = (error) => {
     />,
   });
 };
+
+
+export default ErrorMessage;

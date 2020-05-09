@@ -1,7 +1,6 @@
 import React from 'react';
-import {
-  Tag, Tooltip, Icon, Badge,
-} from 'antd';
+import { Tag, Tooltip, Badge } from 'antd';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import isBoolean from 'lodash/isBoolean';
 import moment from 'moment';
 
@@ -17,7 +16,7 @@ export const RenderFalsyValue = (value, tag = 'dot') => {
   if (!value && !isBoolean(value)) return '-';
 
   if (tag === 'icon') {
-    return value ? <Icon type="check" /> : <Icon type="close" />;
+    return value ? <CheckOutlined /> : <CloseOutlined />;
   }
 
   if (tag === 'dot') {

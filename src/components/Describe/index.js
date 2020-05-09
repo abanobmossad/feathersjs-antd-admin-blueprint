@@ -1,3 +1,1 @@
-import Describe from './Describe';
-
-export default Describe;
+export { default } from './Describe';

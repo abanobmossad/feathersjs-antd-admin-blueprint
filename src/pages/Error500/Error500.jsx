@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Card } from 'antd';
+import { ClockCircleOutlined, BugOutlined, HomeOutlined } from '@ant-design/icons';
 
+// eslint-disable-next-line react/prop-types
 const Error500 = ({ crash }) => (
   <div className="error500_container">
     <div className="error500_compcontainer">
@@ -16,14 +18,14 @@ const Error500 = ({ crash }) => (
       <h2>Sorry, something went wrong on our end. We are currently trying to fix the problem.</h2>
       <p>In the meantime, you can:</p>
       <div className="error500_step">
-        <Button type="link" href="/" icon="home">Go to home page</Button>
+        <Button type="link" href="/" icon={<HomeOutlined />}>Go to home page</Button>
       </div>
       <div className="error500_step">
-        <Button type="ghost" style={{ border: 'none' }} icon="clock-circle">Wait a few minutes, and try again</Button>
+        <Button type="ghost" style={{ border: 'none' }} icon={<ClockCircleOutlined />}>Wait a few minutes, and try again</Button>
         <p />
       </div>
       <div className="error500_step">
-        <Button type="ghost" style={{ border: 'none' }} icon="bug">Report to us what happened</Button>
+        <Button type="ghost" style={{ border: 'none' }} icon={<BugOutlined />}>Report to us what happened</Button>
         <p />
       </div>
     </Card>

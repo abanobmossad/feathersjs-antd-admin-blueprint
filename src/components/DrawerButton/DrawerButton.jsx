@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import {
-  Button, Drawer, Icon, Tooltip, Typography,
+  Button, Drawer, Tooltip, Typography,
 } from 'antd';
+import { MoreOutlined, FullscreenOutlined } from '@ant-design/icons';
 import { FormattedMessage } from 'react-intl';
 
 class DrawerButton extends Component {
@@ -49,6 +50,8 @@ class DrawerButton extends Component {
     } = this.props;
     const { width } = this.state;
 
+    const ButtonIcon = buttonProps.icon;
+
     return (
       <>
         <Button
@@ -57,7 +60,7 @@ class DrawerButton extends Component {
           onClick={this.showDrawer}
           style={style}
         >
-          <Icon type={buttonProps.icon} />
+          <ButtonIcon />
           {' '}
           {buttonTitle && buttonTitle}
         </Button>
@@ -68,7 +71,7 @@ class DrawerButton extends Component {
               {path && (
                 <Tooltip placement="right" title={<FormattedMessage id="Drawer.open.tip" defaultMessage="Open on new window" />}>
                   <Button type="link" onClick={() => history.push(path)}>
-                    <Icon type="fullscreen" style={{ fontSize: 16 }} />
+                    <FullscreenOutlined style={{ fontSize: 16 }} />
                   </Button>
                 </Tooltip>
               )}
@@ -84,7 +87,7 @@ class DrawerButton extends Component {
           {/* Show the resizer only if it is View drawer */}
           {resizable && (
           <div className="resizable-drawer">
-            <Icon type="more" onMouseDown={this.startResizing} style={{ fontSize: 35 }} />
+            <MoreOutlined onMouseDown={this.startResizing} style={{ fontSize: 35 }} />
           </div>
           )}
           {/* load content */}

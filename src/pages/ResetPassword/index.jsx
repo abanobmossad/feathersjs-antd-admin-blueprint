@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import {
   Input, Card, Alert, Button, message, Form,
 } from 'antd';
-import Icon from 'react-fontawesome';
 import propsTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { LockOutlined } from '@ant-design/icons';
 import server, { getUserToken } from '../../feathers';
 import config from '../../configs';
 
@@ -44,7 +44,7 @@ class ResetPassword extends Component {
     return (
       <div className="auth__wrapper">
         <div className="auth__logo">
-          <img src={config.APP_LOGO_PATH} alt="LOGO" width="430" height="150" />
+          <img src={config.APP_LOGO_PATH} alt="LOGO" width="600" height="150" />
           {' '}
         </div>
 
@@ -69,7 +69,7 @@ class ResetPassword extends Component {
           <Form name="resetPasswordForm" ref={this.form} onFinish={this.resetPass}>
             <Form.Item name="password" rules={[{ required: true, message: 'Please input your Password!' }]} label="Enter new password">
               <Input.Password
-                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
                 type="password"
                 size="large"
                 onChange={() => this.setState({ error: false })}
@@ -77,7 +77,7 @@ class ResetPassword extends Component {
             </Form.Item>
             <Form.Item new="cPassword" rules={[{ required: true, message: 'Please confirm your Password!' }]} label="Confirm password">
               <Input.Password
-                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
                 type="password"
                 size="large"
                 onChange={() => this.setState({ error: false })}
@@ -93,12 +93,7 @@ class ResetPassword extends Component {
               Reset password
             </Button>
           </Form>
-          <p style={{
-            marginTop: '1rem',
-            fontSize: 12,
-            color: 'gray',
-          }}
-          >
+          <p style={{ marginTop: '1rem', fontSize: 12, color: 'gray' }}>
             If you facing any problem, Please retch out one of the administrators
           </p>
         </Card>

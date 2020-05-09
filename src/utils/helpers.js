@@ -1,5 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 import findIndex from 'lodash/findIndex';
+import capitalize from 'lodash/capitalize';
 import configs from '../configs';
 
 export const capitalizeUserName = (name) => name.trim().replace(/\b\w/g, (l) => l.toUpperCase());
@@ -21,9 +22,13 @@ export const permitted = (userPermissions, allowedPermissions = []) => {
   return false;
 };
 
+/**
+ * Set browser title header
+ * @param {String} title page title
+ */
 export const setPageTitle = (title) => {
   // update page title
-  document.title = `${title} • ${configs.APP_NAME}`;
+  document.title = `${capitalize(title)} • ${configs.APP_NAME}`;
 };
 
 

@@ -1,3 +1,1 @@
-import DataDisplayer from './DataDisplayer';
-
-export default DataDisplayer;
+export { default } from './DataDisplayer';

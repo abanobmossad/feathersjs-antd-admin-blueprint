@@ -4,7 +4,7 @@ import PropsTypes from 'prop-types';
 import {
   Form, Input, Card, Button, Alert, Spin,
 } from 'antd';
-import Icon from 'react-fontawesome';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import ForgotModal from '../ResetPassword/ForgotModal';
 import server, { getUserToken } from '../../feathers';
@@ -95,7 +95,7 @@ class Login extends Component {
     return (
       <div className="auth__wrapper">
         <div className="auth__logo">
-          <img src={config.APP_LOGO_PATH} alt="LOGO" width="430" height="150" />
+          <img src={config.APP_LOGO_PATH} alt="LOGO" width="600" height="150" />
           {' '}
         </div>
         <Card
@@ -135,13 +135,13 @@ class Login extends Component {
               <Input
                 size="large"
                 onChange={() => this.setState({ error: false })}
-                prefix={<Icon name="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
                 placeholder={placeHolders.email}
               />
             </Form.Item>
             <Form.Item name="password" rules={[{ required: true, message: 'Please input your Password!' }]}>
               <Input.Password
-                prefix={<Icon name="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
                 type="password"
                 size="large"
                 placeholder={placeHolders.password}
