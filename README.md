@@ -10,6 +10,7 @@ Admin panel blueprint using [ant design](https://ant.design/) and [feathersJs](h
 
 1. clone repo `https://github.com/abanobmossad/feathersjs-antd-admin-blueprint.git`
 2. install dependencies
+3. run server on port `3030`
 
 ```sh
 npm install
